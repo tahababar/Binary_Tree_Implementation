@@ -1,0 +1,163 @@
+// Please make a Visual Studio project with the appropriate .cpp and .h files. 
+// Then paste this code in the appropriate files to get you started.
+
+void runTest() {
+	BinarySearchTree hardcodedTree;
+
+	hardcodedTree.makeHardcodedTree();
+	cout << "Hardcoded tree:" << endl;
+	hardcodedTree.printInOrder();
+	hardcodedTree.print();
+
+	cout << "Tree with insert:" << endl;
+	BinarySearchTree tree;
+	tree.insert(50);
+	tree.insert(70);
+	tree.insert(60);
+	tree.insert(30);
+	tree.insert(25);
+	tree.insert(27);
+	tree.insert(29);
+	tree.insert(28);
+	tree.insert(55);
+	tree.insert(26);
+	tree.insert(75);
+	tree.insert(58);
+
+	tree.printInOrder();
+	tree.print();
+
+	cout << "Contains:" << endl;
+	cout << tree.contains(50) << " " << tree.contains(60) << " " << tree.contains(40) << endl;
+
+	BinarySearchTree tree2;
+	tree2.insert(50);
+	tree2.insert(70);
+	tree2.insert(60);
+	tree2.insert(30);
+	tree2.insert(24);
+	tree2.insert(28);
+	tree2.insert(30);
+	tree2.insert(28);
+	tree2.insert(56);
+	tree2.insert(26);
+	tree2.insert(74);
+	tree2.insert(58);
+
+	cout << "Only evens (on a new tree):" << endl;
+	cout << hardcodedTree.onlyEvens() << " " << tree.onlyEvens() << " " << tree2.onlyEvens() << endl;
+}
+
+int main() {
+	runTest();
+
+	return 0;
+}
+
+/////////////////////////////////////////////////
+
+void BinarySearchTree::makeHardcodedTree() {
+	// ------------------------------------------
+	// root
+	root = new IntBTNode();
+	root->data = 20;
+	root->left = NULL;
+	root->right = NULL;
+
+	// ------------------------------------------
+	// Children of root
+	IntBTNode* leftOfRoot = new IntBTNode();
+	leftOfRoot->data = 15;
+	leftOfRoot->left = NULL;
+	leftOfRoot->right = NULL;
+
+	IntBTNode* rightOfRoot = new IntBTNode();
+	rightOfRoot->data = 27;
+	rightOfRoot->left = NULL;
+	rightOfRoot->right = NULL;
+
+	root->left = leftOfRoot;
+	root->right = rightOfRoot;
+
+	// ------------------------------------------
+	// Children of root's left child
+	IntBTNode* leftOfLeft = new IntBTNode();
+	leftOfLeft->data = 12;
+	leftOfLeft->left = NULL;
+	leftOfLeft->right = NULL;
+
+	IntBTNode* rightOfLeft = NULL; // no node here
+
+	leftOfRoot->left = leftOfLeft;
+	leftOfRoot->right = rightOfLeft;
+
+	// ------------------------------------------
+	// Children of root's right child
+	IntBTNode* leftOfRight = new IntBTNode();
+	leftOfRight->data = 23;
+	leftOfRight->left = NULL;
+	leftOfRight->right = NULL;
+
+	IntBTNode* rightOfRight = new IntBTNode();
+	rightOfRight->data = 29;
+	rightOfRight->left = NULL;
+	rightOfRight->right = NULL;
+
+	rightOfRoot->left = leftOfRight;
+	rightOfRoot->right = rightOfRight;
+
+	// ------------------------------------------
+	// One more child - a great grandchild of the root
+
+	IntBTNode* last = new IntBTNode();
+	last->data = 28;
+	last->left = NULL;
+	last->right = NULL;
+
+	rightOfRight->left = last;
+}
+
+void BinarySearchTree::destructorHelper(IntBTNode* curr) {
+	if (curr != NULL) {
+		IntBTNode* left = curr->left;
+		IntBTNode* right = curr->right;
+		delete curr;
+		destructorHelper(left);
+		destructorHelper(right);
+	}
+}
+
+BinarySearchTree::~BinarySearchTree() {
+	cout << "Calling destructor (automatically, on the local BinarySearchTree variables declared in runTest)" << endl;
+	destructorHelper(root);
+}
+
+void BinarySearchTree::printSpaces(int numSpaces) {
+	for (int i = 0; i < numSpaces; i++)
+		cout << " ";
+}
+
+void BinarySearchTree::printHelper(IntBTNode* curr, int depth, char header) {
+	if (curr != NULL) {
+		printSpaces(depth * 4);
+		if (curr != root)
+			cout << header << ": ";
+
+		cout << curr->data << endl;
+		printHelper(curr->left, depth + 1, 'L');
+		printHelper(curr->right, depth + 1, 'R');
+	}
+}
+
+void BinarySearchTree::print() {
+	cout << "-------------------------------" << endl;
+	printHelper(root, 0, ' ');
+	cout << "-------------------------------" << endl;
+}
+
+/////////////////////////////////////////
+
+
+
+
+
